@@ -10,6 +10,10 @@ const BlogForm = (props) => {
     await blogService.add(credentials)
     const blogs = await blogService.getAll()
     props.setBlogs(blogs)
+    props.setMessage({ body:`${ props.blog.title } by ${ props.blog.author } is added`, type: true } )
+    setTimeout(() => {
+      props.setMessage({ body: '', type: true })
+    }, 5000)
   }
 
   return (

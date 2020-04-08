@@ -4,13 +4,14 @@ import blogService from './services/blogs'
 //import LoginForm from './components/LoginForm'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
 
 const App = () => {
   const [ blogs, setBlogs ] = useState([])
   const [ username, setUsername ] = useState('')
   const [ password, setPassword ] = useState('')
   const [ user, setUser ] = useState(null)
-  const [ errorMessage, setErrorMessage ] = useState('')
+  const [ message, setMessage ] = useState({ body:'', type: true })
   const [ blog, setBlog ] = useState({})
 
   useEffect(() => {
@@ -37,9 +38,12 @@ const App = () => {
       setPassword('')
     }
     catch(exception){
-      setErrorMessage('Wrong credentials')
+      setMessage({
+        body: 'Wrong credentials',
+        type: false
+      })
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage({ body: '', type: true })
       }, 500)
     }
   }
@@ -79,6 +83,7 @@ const App = () => {
           blog={ blog } setBlog={ setBlog }
           user={user}
           blogs ={ blogs } setBlogs={ setBlogs }
+          setMessage={ setMessage }
         />
         { blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
@@ -93,7 +98,7 @@ const App = () => {
 
   return (
     <div>
-      <p>{ errorMessage }</p>
+      <Notification message={ message }/>
       { user === null ? loginForm(): listBlogs()}
     </div>
   )
