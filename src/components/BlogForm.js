@@ -1,58 +1,66 @@
-import React from 'react'
+import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
-const BlogForm = (props) => {
+const BlogForm = ({ setBlogs, setMessage, blogFormRef }) => {
+  const [ newBlog, setNewBlog ] = useState( { name: '', author:'', url: '', likes:0 })
   const addBlog = async (event) => {
     event.preventDefault()
-    props.setBlog(props.blog)
-    const credentials = { token: props.user.token, ...props.blog }
-    props.setBlog({})
-    await blogService.add(credentials)
+    blogFormRef.current.toggleVisibility()
+    await blogService.add(newBlog)
+    setNewBlog({})
     const blogs = await blogService.getAll()
-    props.setBlogs(blogs)
-    props.setMessage({ body:`${ props.blog.title } by ${ props.blog.author } is added`, type: true } )
+    setBlogs(blogs)
+    setMessage({ body:`${ newBlog.title } by ${ newBlog.author } is added`, type: true } )
     setTimeout(() => {
-      props.setMessage({ body: '', type: true })
+      setMessage({ body: '', type: true })
     }, 5000)
   }
-
+  const handleBlogChange = (event) => {
+    event.preventDefault()
+    const target = event.target
+    const value = target.value
+    const name = target.name
+    setNewBlog({
+      ...newBlog, [name]: value
+    })
+  }
   return (
     <div>
       <form onSubmit={ addBlog } >
         <div>
           title
           <input
-            value = { props.blog.title }
+            value = { newBlog.title || '' }
             type='text'
             name='title'
-            onChange={ ({ target }) => { props.blog.title = target.value } }>
+            onChange={ handleBlogChange }>
           </input>
         </div>
         <div>
           author:
           <input
-            value = { props.blog.author }
+            value = { newBlog.author || '' }
             type='text'
             name='author'
-            onChange={ ({ target }) => { props.blog.author = target.value } }>
+            onChange={ handleBlogChange }>
           </input>
         </div>
         <div>
           url
           <input
-            value = { props.blog.url }
+            value = { newBlog.url || '' }
             type='text'
             name='url'
-            onChange={ ({ target }) => { props.blog.url = target.value } }>
+            onChange={ handleBlogChange }>
           </input>
         </div>
         <div>
           likes
           <input
-            value = { props.blog.likes }
+            value = { newBlog.likes || 0}
             type='number'
-            name='title'
-            onChange={ ({ target }) => { props.blog.likes = target.value } }>
+            name='likes'
+            onChange={ handleBlogChange }>
           </input>
           <br/>
           <button type='submit'>Add</button>

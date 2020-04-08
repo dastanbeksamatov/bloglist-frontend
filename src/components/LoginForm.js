@@ -1,29 +1,34 @@
-const React = require('react')
-const loginService = require('../services/login')
+import React, { useState } from 'react'
+import loginService from '../services/login'
 
+const LoginForm = ({ setUser, setMessage }) => {
+  const [ username, setUsername ] = useState('')
+  const [ password, setPassword ] = useState('')
 
-const LoginForm = (props) => {
   const handleLogin = async (event) => {
     event.preventDefault()
-    const username = props.username
-    const password = props.password
     console.log({ username, password })
-    await loginService.login({ username, password, })
     try {
       const user = await loginService.login({
         username, password,
       })
-      props.setUser(user)
-      props.setUsername('')
-      props.setPassword('')
+      window.localStorage.setItem('loggedInUser', JSON.stringify(user))
+      setUser(user)
+      setUsername('')
+      setPassword('')
     }
     catch(exception){
-      props.setErrorMessage('Wrong credentials')
+      setMessage({
+        body: 'Wrong credentials',
+        type: false
+      })
       setTimeout(() => {
-        props.setErrorMessage(null)
+        setMessage({ body: '', type: true })
       }, 500)
     }
   }
+
+
 
   return (
     <form onSubmit={ handleLogin }>
@@ -31,17 +36,17 @@ const LoginForm = (props) => {
         username
         <input
           type='text'
-          value = { props.username }
+          value = { username }
           name='username'
-          onChange={({ target }) => { props.setUsername(target.value) } } />
+          onChange={ ({ target }) => { setUsername(target.value) } } />
       </div>
       <div>
         password
         <input
           type='password'
-          value = { props.password }
+          value = { password }
           name='password'
-          onChange={({ target }) => { props.setPassword(target.value) } } />
+          onChange={ ({ target }) => { setPassword(target.value) } } />
       </div>
       <button type='submit'>Log in</button>
     </form>
