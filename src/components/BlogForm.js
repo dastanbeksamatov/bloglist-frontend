@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 
 const BlogForm = ({ setBlogs, setMessage, blogFormRef }) => {
   const [ newBlog, setNewBlog ] = useState( { name: '', author:'', url: '', likes:0 })
@@ -71,3 +72,7 @@ const BlogForm = ({ setBlogs, setMessage, blogFormRef }) => {
 }
 
 export default BlogForm
+
+BlogForm.PropTypes = {
+  handleBlogChange: PropTypes.func.isRequired
+}
