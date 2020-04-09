@@ -32,8 +32,6 @@ const App = () => {
     setUser(null)
   }
 
-
-
   const listBlogs = () => {
     return(
       <div>
@@ -45,7 +43,7 @@ const App = () => {
           <BlogForm setBlogs={ setBlogs } setMessage={ setMessage } blogFormRef = { blogFormRef }/>
         </Togglable>
         <Togglable buttonLabel='show all blogs'>
-          { blogs.map(blog =>
+          { blogs.sort((a,b) => a.likes - b.likes).map(blog =>
             <Blog key={blog.id} blog={blog} />
           ) }
         </Togglable>

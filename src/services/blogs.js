@@ -21,4 +21,38 @@ const add = async newBlog => {
   return response.data
 }
 
-export default { getAll, add, setToken }
+const update = async newBlog => {
+  const id = newBlog.id
+  delete newBlog.user
+  delete newBlog.id
+  const response = await axios.put(
+    `${baseUrl}/${id}`,
+    newBlog,
+    {
+      headers: {
+        Authorization: token
+      }
+    }
+  )
+  return response.data
+}
+
+const remove = async id => {
+  const response = await axios.delete(
+    `${baseUrl}/${id}`,
+    {
+      headers: {
+        Authorization: token
+      }
+    }
+  )
+  return response.data
+}
+
+export default {
+  getAll,
+  add,
+  setToken,
+  remove,
+  update
+}
