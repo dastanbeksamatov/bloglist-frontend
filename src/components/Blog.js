@@ -23,14 +23,14 @@ const Blog = ({ blog }) => {
     setVisible(!visible)
   }
 
-  const handleLike = () => {
+  const handleLike = async () => {
     newBlog.likes += 1
     setNewBlog(newBlog)
-    // const updatedBlog = await blogService.update(newBlog)
-    // setNewBlog({
-    //   id: newBlog.id,
-    //   ...JSON.parse(updatedBlog)
-    // })
+    const updatedBlog = await blogService.update(newBlog)
+    setNewBlog({
+      id: newBlog.id,
+      ...JSON.parse(updatedBlog)
+    })
   }
 
   const handleDelete = async () => {

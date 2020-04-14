@@ -32,6 +32,10 @@ const App = () => {
     setUser(null)
   }
 
+  const addTestBlog = () => {
+    console.log('For test purposes')
+  }
+
   const listBlogs = () => {
     return(
       <div>
@@ -50,7 +54,6 @@ const App = () => {
       </div>
     )
   }
-
   const loginForm = () => {
 
     return (

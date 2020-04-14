@@ -40,7 +40,9 @@ describe('tests for blog rendering', () => {
     expect(component.container.querySelector('.default')).toHaveStyle('display: none')
     expect(component.container.querySelector('.toggledContent')).not.toHaveStyle('display: none')
   })
-
+})
+// uncomment this to test if the button is called
+/*
   test('when like button is clicked twice', () => {
     const blog = {
       title: 'Test article',
@@ -48,17 +50,14 @@ describe('tests for blog rendering', () => {
       url: 'https://test.com',
       likes: 3
     }
-    const { getByText, container } = render(
-      <Blog blog={ blog } />
+    const mockHandler = jest.fn()
+    const component = render(
+      <Blog blog={ blog } handleTestLike={ mockHandler }/>
     )
-    fireEvent.click(getByText('view'))
-    fireEvent.click(getByText(/^like$/))
-    expect(container.querySelector('.toggledContent')).toHaveTextContent('likes 4')
+    fireEvent.click(component.getByText('view'))
+    fireEvent.click(component.getByText(/^like$/))
+    fireEvent.click(component.getByText(/^like$/))
+    expect(mockHandler.mock.calls).toHaveLength(2)
   })
 })
-
-// describe('test for the form', () => {
-//   test('test if form is rendered', () => {
-
-//   })
-})
+*/

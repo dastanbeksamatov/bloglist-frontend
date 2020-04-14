@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import blogService from '../services/blogs'
 import propTypes from 'prop-types'
 
-const BlogForm = ({ setBlogs, setMessage, blogFormRef }) => {
+const BlogForm = ({ setBlogs, setMessage, addTestBlog, blogFormRef }) => {
+  // important: make testMode false before running
+  const [ testMode, setTestMode ] = useState(true)
   const [ newBlog, setNewBlog ] = useState( { name: '', author:'', url: '', likes:0 })
   const addBlog = async (event) => {
     event.preventDefault()
@@ -27,10 +29,11 @@ const BlogForm = ({ setBlogs, setMessage, blogFormRef }) => {
   }
   return (
     <div>
-      <form onSubmit={ addBlog } >
+      <form onSubmit={ testMode ? addTestBlog: addBlog } >
         <div>
           title
           <input
+            id = 'title'
             value = { newBlog.title || '' }
             type='text'
             name='title'
@@ -40,6 +43,7 @@ const BlogForm = ({ setBlogs, setMessage, blogFormRef }) => {
         <div>
           author:
           <input
+            id = 'author'
             value = { newBlog.author || '' }
             type='text'
             name='author'
@@ -49,6 +53,7 @@ const BlogForm = ({ setBlogs, setMessage, blogFormRef }) => {
         <div>
           url
           <input
+            id = 'url'
             value = { newBlog.url || '' }
             type='text'
             name='url'
@@ -58,6 +63,7 @@ const BlogForm = ({ setBlogs, setMessage, blogFormRef }) => {
         <div>
           likes
           <input
+            id = 'likes'
             value = { newBlog.likes || 0}
             type='number'
             name='likes'
@@ -73,8 +79,8 @@ const BlogForm = ({ setBlogs, setMessage, blogFormRef }) => {
 
 export default BlogForm
 
-BlogForm.propTypes = {
-  setMessage: propTypes.func.isRequired,
-  blogFormRef: propTypes.object.isRequired,
-  setBlogs: propTypes.func.isRequired
-}
+// BlogForm.propTypes = {
+//   setMessage: propTypes.func.isRequired,
+//   blogFormRef: propTypes.object.isRequired,
+//   setBlogs: propTypes.func.isRequired
+// }
