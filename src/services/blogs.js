@@ -22,19 +22,18 @@ const add = async newBlog => {
 }
 
 const update = async newBlog => {
-  const id = newBlog.id
-  delete newBlog.user
-  delete newBlog.id
+  // eslint-disable-next-line no-unused-vars
+  const { id, user, ...blog } = newBlog
   const response = await axios.put(
     `${baseUrl}/${id}`,
-    newBlog,
+    blog,
     {
       headers: {
         Authorization: token
       }
     }
   )
-  return response.data
+  return response.config.data
 }
 
 const remove = async id => {

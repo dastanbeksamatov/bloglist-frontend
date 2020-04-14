@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
 const Blog = ({ blog }) => {
-  const [visible, setVisible] = useState(true)
+  const [ visible, setVisible ] = useState(true)
+  const [ newBlog, setNewBlog ] = useState(blog)
+
   const hideWhenVisible = {
     display: visible ? 'none': '',
     borderRadius: 2,
@@ -21,9 +23,14 @@ const Blog = ({ blog }) => {
     setVisible(!visible)
   }
 
-  const handleLike = async () => {
-    blog.likes += 1
-    await blogService.update(blog)
+  const handleLike = () => {
+    newBlog.likes += 1
+    setNewBlog(newBlog)
+    // const updatedBlog = await blogService.update(newBlog)
+    // setNewBlog({
+    //   id: newBlog.id,
+    //   ...JSON.parse(updatedBlog)
+    // })
   }
 
   const handleDelete = async () => {
@@ -36,18 +43,18 @@ const Blog = ({ blog }) => {
 
   return(
     <div className='blog'>
-      <div style={ showWhenVisible }>
-        { blog.title } by {blog.author}
+      <div style={ showWhenVisible } className='default'>
+        { newBlog.title } by {newBlog.author}
         <button onClick={ toggleVisibility }>view</button>
       </div>
       <div style={ hideWhenVisible }  className='toggledContent'>
-        { blog.title } by { blog.author } <br/>
-        { blog.url } <br/>
-        likes { blog.likes }
-        <button onClick={ handleLike }> like</button>
+        <p>{ newBlog.title } by { newBlog.author } </p>
+        <p>{ newBlog.url }</p>
+        <p>likes { newBlog.likes }</p>
+        <button onClick={ handleLike }> like </button>
         <br/>
-        <button onClick={ handleDelete }>delete</button> <br/>
-        <button onClick= { toggleVisibility }>hide</button>
+        <button onClick={ handleDelete }> delete </button> <br/>
+        <button onClick= { toggleVisibility }> hide </button>
       </div>
     </div>
   )
