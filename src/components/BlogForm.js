@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 const BlogForm = ({ addBlog, blogFormRef }) => {
   // important: make testMode false before running
-  const [ newBlog, setNewBlog ] = useState( { name: '', author:'', url: '', likes:0 })
+  const [ newBlog, setNewBlog ] = useState( { title: '', author:'', url: '', likes:0 })
   const handleSubmit = async (event) => {
     event.preventDefault()
     blogFormRef.current.toggleVisibility()
@@ -11,6 +11,7 @@ const BlogForm = ({ addBlog, blogFormRef }) => {
   }
   const handleBlogChange = (event) => {
     event.preventDefault()
+    // gets every input by its name and updates newBlog state with every change
     const target = event.target
     const value = target.value
     const name = target.name
@@ -20,7 +21,7 @@ const BlogForm = ({ addBlog, blogFormRef }) => {
   }
   return (
     <div>
-      <form onSubmit={ handleSubmit } >
+      <form id='login-form' onSubmit={ handleSubmit } >
         <div>
           title
           <input
@@ -55,13 +56,13 @@ const BlogForm = ({ addBlog, blogFormRef }) => {
           likes
           <input
             id = 'likes'
-            value = { newBlog.likes || 0}
+            value = { newBlog.likes}
             type='number'
             name='likes'
             onChange={ handleBlogChange }>
           </input>
           <br/>
-          <button type='submit'>Add</button>
+          <button id='submit-blog' type='submit'>Add</button>
         </div>
       </form>
     </div>

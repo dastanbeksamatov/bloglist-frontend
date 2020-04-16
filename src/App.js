@@ -26,7 +26,7 @@ const App = () => {
       console.log(JSON.parse(user))
       setUser(JSON.parse(user))
       const setToken = async (user) => {
-        await blogService.setToken(user.token)
+        await blogService.setToken(JSON.parse(user).token)
       }
       setToken(user)
     }
@@ -56,7 +56,7 @@ const App = () => {
       <div>
         <h2>blogs</h2>
         <p>{ user.name } is logged in </p>
-        <button onClick={ handleClick }>log out </button>
+        <button id='logout' onClick={ handleClick }>log out </button>
         <h2>Create new</h2>
         <Togglable buttonLabel='new blog' ref={ blogFormRef }>
           <BlogForm addBlog={ addBlog } blogFormRef = { blogFormRef }/>

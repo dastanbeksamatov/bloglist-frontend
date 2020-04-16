@@ -31,10 +31,11 @@ const LoginForm = ({ setUser, setMessage }) => {
   }
 
   return (
-    <form onSubmit={ handleLogin }>
+    <form id='login-form' onSubmit={ handleLogin }>
       <div>
         username
         <input
+          id='username'
           type='text'
           value = { username }
           name='username'
@@ -43,12 +44,13 @@ const LoginForm = ({ setUser, setMessage }) => {
       <div>
         password
         <input
+          id='password'
           type='password'
           value = { password }
           name='password'
           onChange={ ({ target }) => { setPassword(target.value) } } />
       </div>
-      <button type='submit'>Log in</button>
+      <button id='submit-login' type='submit'>Log in</button>
     </form>
   )
 }
