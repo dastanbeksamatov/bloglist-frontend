@@ -23,9 +23,9 @@ const Blog = ({ blog, addLike }) => {
     setVisible(!visible)
   }
 
-  const handleLike = () => {
+  const handleLike = async () => {
     newBlog.likes += 1
-    addLike(newBlog)
+    await addLike(newBlog)
     setNewBlog({
       id: newBlog.id,
       ...newBlog

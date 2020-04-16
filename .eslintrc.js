@@ -3,7 +3,8 @@ module.exports = {
         'browser': true,
         'commonjs': true,
         'es6': true,
-        'jest': true
+        'jest': true,
+        'cypress': true
     },
     'extends': [
         'eslint:recommended',
@@ -22,7 +23,7 @@ module.exports = {
         'allowImportExportEverywhere': true,
     },
     'plugins': [
-        'react'
+        'react', 'cypress'
     ],
     'rules': {
         'indent': [

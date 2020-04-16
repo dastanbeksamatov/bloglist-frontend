@@ -5,7 +5,7 @@ const BlogForm = ({ addBlog, blogFormRef }) => {
   const [ newBlog, setNewBlog ] = useState( { name: '', author:'', url: '', likes:0 })
   const handleSubmit = async (event) => {
     event.preventDefault()
-    //blogFormRef.current.toggleVisibility()
+    blogFormRef.current.toggleVisibility()
     await addBlog(newBlog)
     setNewBlog({})
   }

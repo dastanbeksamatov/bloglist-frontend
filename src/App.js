@@ -14,16 +14,21 @@ const App = () => {
   const blogFormRef = React.createRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
+    const getAll = async () => {
+      const blogs = await blogService.getAll()
+      setBlogs(blogs)
+    }
+    getAll()
   }, [])
   useEffect(() => {
     if(window.localStorage.getItem('loggedInUser')){
       const user = window.localStorage.getItem('loggedInUser')
+      console.log(JSON.parse(user))
       setUser(JSON.parse(user))
-      blogService.setToken(JSON.parse(user).token)
-
+      const setToken = async (user) => {
+        await blogService.setToken(user.token)
+      }
+      setToken(user)
     }
   }, [])
 
@@ -36,7 +41,7 @@ const App = () => {
     await blogService.update(newBlog)
   }
 
-  const addBlog = async newBlog => {
+  const addBlog = async (newBlog) => {
     await blogService.add(newBlog)
     const newBlogs = await blogService.getAll()
     setBlogs(newBlogs)
@@ -69,7 +74,7 @@ const App = () => {
     return (
       <div>
         <Togglable buttonLabel='login'>
-          <LoginForm setUser={ setUser }/>
+          <LoginForm setUser={ setUser } setMessage={ setMessage }/>
         </Togglable>
       </div>
     )
