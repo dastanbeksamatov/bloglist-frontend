@@ -32,8 +32,18 @@ const App = () => {
     setUser(null)
   }
 
-  const addTestBlog = () => {
-    console.log('For test purposes')
+  const addLike = async (newBlog) => {
+    await blogService.update(newBlog)
+  }
+
+  const addBlog = async newBlog => {
+    await blogService.add(newBlog)
+    const newBlogs = await blogService.getAll()
+    setBlogs(newBlogs)
+    setMessage({ body:`${ newBlog.title } by ${ newBlog.author } is added`, type: true } )
+    setTimeout(() => {
+      setMessage({ body: '', type: true })
+    }, 5000)
   }
 
   const listBlogs = () => {
@@ -44,11 +54,11 @@ const App = () => {
         <button onClick={ handleClick }>log out </button>
         <h2>Create new</h2>
         <Togglable buttonLabel='new blog' ref={ blogFormRef }>
-          <BlogForm setBlogs={ setBlogs } setMessage={ setMessage } blogFormRef = { blogFormRef }/>
+          <BlogForm addBlog={ addBlog } blogFormRef = { blogFormRef }/>
         </Togglable>
         <Togglable buttonLabel='show all blogs'>
           { blogs.sort((a,b) => a.likes - b.likes).map(blog =>
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} addLike ={ addLike }/>
           ) }
         </Togglable>
       </div>

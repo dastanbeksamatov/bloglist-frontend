@@ -1,22 +1,13 @@
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
-import propTypes from 'prop-types'
 
-const BlogForm = ({ setBlogs, setMessage, addTestBlog, blogFormRef }) => {
+const BlogForm = ({ addBlog, blogFormRef }) => {
   // important: make testMode false before running
-  const [ testMode, setTestMode ] = useState(true)
   const [ newBlog, setNewBlog ] = useState( { name: '', author:'', url: '', likes:0 })
-  const addBlog = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    blogFormRef.current.toggleVisibility()
-    await blogService.add(newBlog)
+    //blogFormRef.current.toggleVisibility()
+    await addBlog(newBlog)
     setNewBlog({})
-    const blogs = await blogService.getAll()
-    setBlogs(blogs)
-    setMessage({ body:`${ newBlog.title } by ${ newBlog.author } is added`, type: true } )
-    setTimeout(() => {
-      setMessage({ body: '', type: true })
-    }, 5000)
   }
   const handleBlogChange = (event) => {
     event.preventDefault()
@@ -29,7 +20,7 @@ const BlogForm = ({ setBlogs, setMessage, addTestBlog, blogFormRef }) => {
   }
   return (
     <div>
-      <form onSubmit={ testMode ? addTestBlog: addBlog } >
+      <form onSubmit={ handleSubmit } >
         <div>
           title
           <input
@@ -78,9 +69,3 @@ const BlogForm = ({ setBlogs, setMessage, addTestBlog, blogFormRef }) => {
 }
 
 export default BlogForm
-
-// BlogForm.propTypes = {
-//   setMessage: propTypes.func.isRequired,
-//   blogFormRef: propTypes.object.isRequired,
-//   setBlogs: propTypes.func.isRequired
-// }

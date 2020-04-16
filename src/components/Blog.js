@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
-const Blog = ({ blog }) => {
+const Blog = ({ blog, addLike }) => {
   const [ visible, setVisible ] = useState(true)
   const [ newBlog, setNewBlog ] = useState(blog)
 
@@ -23,13 +23,12 @@ const Blog = ({ blog }) => {
     setVisible(!visible)
   }
 
-  const handleLike = async () => {
+  const handleLike = () => {
     newBlog.likes += 1
-    setNewBlog(newBlog)
-    const updatedBlog = await blogService.update(newBlog)
+    addLike(newBlog)
     setNewBlog({
       id: newBlog.id,
-      ...JSON.parse(updatedBlog)
+      ...newBlog
     })
   }
 
