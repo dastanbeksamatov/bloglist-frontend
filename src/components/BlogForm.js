@@ -56,7 +56,7 @@ const BlogForm = ({ addBlog, blogFormRef }) => {
           likes
           <input
             id = 'likes'
-            value = { newBlog.likes}
+            value = { newBlog.likes || 0 }
             type='number'
             name='likes'
             onChange={ handleBlogChange }>

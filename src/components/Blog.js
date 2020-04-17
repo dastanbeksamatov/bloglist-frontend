@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
-const Blog = ({ blog, addLike }) => {
+const Blog = ({ blog, addLike, removeBlog }) => {
   const [ visible, setVisible ] = useState(true)
   const [ newBlog, setNewBlog ] = useState(blog)
 
@@ -34,28 +34,28 @@ const Blog = ({ blog, addLike }) => {
 
   const handleDelete = async () => {
     if(window.confirm(`Do you want to delete ${ blog.title }?`)){
-      const id = blog.id
-      await blogService.remove(id)
-      console.log('removed ', id)
+      await removeBlog(newBlog)
     }
   }
 
   return(
-    <div className='blog'>
-      <div id='div-blog-1' style={ showWhenVisible } className='default'>
-        { newBlog.title } by {newBlog.author}
-        <button id='view-blog' onClick={ toggleVisibility }>view</button>
-      </div>
-      <div id='div-blog-2' style={ hideWhenVisible }  className='toggledContent'>
-        <p>{ newBlog.title } by { newBlog.author } </p>
-        <p>{ newBlog.url }</p>
-        <p>likes { newBlog.likes }</p>
-        <button id='like-blog' onClick={ handleLike }> like </button>
-        <br/>
-        <button id='delete-blog' onClick={ handleDelete }> delete </button> <br/>
-        <button id='hide-blog' onClick= { toggleVisibility }> hide </button>
-      </div>
-    </div>
+    <li id='newBlog.id' className='blog'>
+      <span>
+        <div id='div-blog-1' style={ showWhenVisible } className='default'>
+          { newBlog.title } by {newBlog.author}
+          <button id='view-blog' onClick={ toggleVisibility }>view</button>
+        </div>
+        <div id='div-blog-2' style={ hideWhenVisible }  className='toggledContent'>
+          <p>{ newBlog.title } by { newBlog.author } </p>
+          <p>{ newBlog.url }</p>
+          <p>likes { newBlog.likes }</p>
+          <button id='like-blog' onClick={ handleLike }> like </button>
+          <br/>
+          <button id='delete-blog' onClick={ handleDelete }> delete </button> <br/>
+          <button id='hide-blog' onClick= { toggleVisibility }> hide </button>
+        </div>
+      </span>
+    </li>
   )
 }
 

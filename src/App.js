@@ -51,6 +51,16 @@ const App = () => {
     }, 5000)
   }
 
+  const removeBlog = async (blog) => {
+    await blogService.remove(blog.id)
+    const newBlogs = await blogService.getAll()
+    setBlogs(newBlogs)
+    setMessage({ body: `${ blog.title } by ${ blog.author } was removed`, type: false })
+    setTimeout(() => {
+      setMessage({ body: '', type: true })
+    }, 5000)
+  }
+
   const listBlogs = () => {
     return(
       <div>
@@ -62,9 +72,11 @@ const App = () => {
           <BlogForm addBlog={ addBlog } blogFormRef = { blogFormRef }/>
         </Togglable>
         <Togglable buttonLabel='show all blogs'>
+          <ul id='list-blogs'>
           { blogs.sort((a,b) => a.likes - b.likes).map(blog =>
-            <Blog key={blog.id} blog={blog} addLike ={ addLike }/>
+            <Blog key={blog.id} blog={blog} addLike ={ addLike } removeBlog={ removeBlog }/>
           ) }
+          </ul>
         </Togglable>
       </div>
     )
@@ -81,14 +93,14 @@ const App = () => {
   }
   if (user===null){
     return(
-      <div>
+      <div id='login-form'>
         <Notification message= { message }/>
         { loginForm() }
       </div>
     )
   }
   return (
-    <div>
+    <div id='list-blogs'>
       <Notification message={ message }/>
       { listBlogs() }
     </div>
