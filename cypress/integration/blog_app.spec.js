@@ -80,10 +80,16 @@ describe('Test for blog app', function() {
       cy.get('#notif-div').should('have.css', 'color', 'rgb(255, 0, 0)')
       cy.get('ul>li').should('have.length', 2)
     })
-    it.only('checks whether blogs are sorted in ascending order', function() {
+    it('checks whether blogs are sorted in ascending order', function() {
       cy.contains('show all blogs').click()
+      const likes = [ 10, 12, 23 ]
       cy.get('ul>li').each(($li, index) => {
-        cy.get('ul>li').eq(index).contains('view').click()
+        if(cy.get('ul>li').eq(index).contains(likes[index])){
+          cy.get('ul>li').eq(index).contains('view').click()
+        }
+        else{
+          cy.wrap('$li').end()
+        }
       })
     })
   })
