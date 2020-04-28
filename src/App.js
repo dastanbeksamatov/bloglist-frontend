@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
-import { Switch, Route, Link, useRouteMatch, useHistory } from 'react-router-dom'
+import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
+// import components
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -9,12 +10,15 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
 import User from './components/User'
+// important functions from reducers
 import { useDispatch, useSelector } from 'react-redux'
-import { initializeBlogs, addBlog, removeBlog, updateBlog } from './reducers/blogReducer'
+import { initializeBlogs, addBlog, removeBlog, updateBlog, commentBlog } from './reducers/blogReducer'
 import { setNotification, setErrorMessage } from './reducers/notificationReducer'
 import { setUser, clearUser } from './reducers/userReducer'
 import { initUsers } from './reducers/usersReducer'
-
+// functions for style
+import { Table } from 'react-bootstrap'
+import { Container, AppBar, Button, Toolbar } from '@material-ui/core'
 
 const App = () => {
   const blogFormRef = React.createRef()
@@ -70,6 +74,10 @@ const App = () => {
     dispatch(setUser(loggedInUser))
   }
 
+  const createComment = async (comment) => {
+    dispatch(commentBlog(comment))
+  }
+
   const invalidLogin = async () => {
     dispatch(setErrorMessage({body: 'invalid credentials', type: false}, 5000))
   }
@@ -82,28 +90,47 @@ const App = () => {
 
   const Menu = () => {
     return (
-      <div>
-        <Link to="/"> main </Link>
-        <Link to="/users"> users </Link>
-        <Link to="/blogs"> blogs </Link>
-        { user.name } is logged in 
-        <button id='logout' onClick={ handleClick }>log out </button>
-      </div>
+      <Container>
+        <AppBar position="static">
+          <Toolbar>
+            <Button color="inherit" component={ Link } to="/"> main</Button>
+            <Button color="inherit" component={ Link } to="/blogs">blogs</Button>
+            <Button color="inherit" component={ Link } to="/users">users</Button>
+            <Button >
+              {user
+                ? <em>{ user.name } logged in</em>
+                : <Button color="inherit" component={ Link } to="/">
+                  </Button>
+              }
+            </Button>
+            <Button color="inherit" onClick={ handleClick }>log out</Button>
+          </Toolbar>
+        </AppBar>
+      </Container>
     )
   }
 
   const listBlogs = () => {
     return(
       <div>
-        <h2>Create new</h2>
+        <h4>Create new</h4>
         <Togglable buttonLabel='new blog' ref={ blogFormRef }>
           <BlogForm addBlog={ createBlog } blogFormRef = { blogFormRef }/>
         </Togglable>
-        <ul id='list-blogs'>
-          { blogs.sort((a,b) => a.likes - b.likes).map(blog => 
-            <li key={ blog.id }><Link to={`/blogs/${blog.id}`}>{ blog.title }</Link></li>
-          )}
-        </ul>
+        <Table striped variant="dark">
+          <tbody>
+            { blogs.sort((a,b) => a.likes - b.likes).map(blog => 
+              <tr key={ blog.id }>
+                <td>
+                  <Link to={`/blogs/${blog.id}`}>{ blog.title }</Link>
+                </td>
+                <td>
+                  {blog.author}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
       </div>
     )
   }
@@ -126,10 +153,10 @@ const App = () => {
     )
   }
   return (
-    <div id='list-blogs'>
+    <div id='list-blogs' className="container">
       <Menu />
       <Notification message={ message }/>
-      <h2>blogs</h2>
+      <h1>Bloglist app</h1>
       <Switch>
         <Route path="/users/:id">
           <User user={ selectedUser } />
@@ -138,13 +165,15 @@ const App = () => {
           <Users users={ users }/>  
         </Route>
         <Route path="/blogs/:id">
-          <Blog blog = { matchedBlog } addLike={ addLike } removeBlog={ deleteBlog }/>
+          <Blog blog = { matchedBlog } addLike={ addLike } removeBlog={ deleteBlog } createComment={ createComment }/>
         </Route>
         <Route path="/blogs">
           { listBlogs() }
         </Route>
         <Route path="/">
-          <h1>Blog App</h1>
+          <Container>
+            <h3>Welcome to the main page of the Bloglist app </h3>
+          </Container>
         </Route>
       </Switch>
     </div>

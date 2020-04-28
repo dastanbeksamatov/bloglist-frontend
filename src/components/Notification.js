@@ -1,23 +1,18 @@
 import React from 'react'
+import { Alert } from '@material-ui/lab'
 
 const Notification = ({ message }) => {
-  let templateStyle = {
-    background: 'lightgrey',
-    fontSize: 20,
-    borderStyle: 'solid',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    align: 'center',
-    color: 'green'
-  }
-  const style = message.type ? templateStyle: { ...templateStyle, color:'red' }
+  const type = message.type ? "success": "error"
   if(message.body === ''){
     return null
   }
   return(
-    <div id='notif-div' style={ style }>
-      { message.body }
+    <div id='notif-div'>
+      { (message &&
+        <Alert severity={ type }>
+          {message.body}
+        </Alert>
+      )}
     </div>
   )
 }

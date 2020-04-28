@@ -1,17 +1,14 @@
 import React from 'react'
-import { useField } from '../hooks'
+import { Form, Button } from 'react-bootstrap'
 
 
 const LoginForm = ({ login, invalidLogin }) => {
-  const username = useField('', '')
-  const password = useField('password', '')
 
   const handleLogin = async (event) => {
     event.preventDefault()
+    const form = event.target
     try {
-      login({ username: username.value, password: password.value })
-      username.value = ''
-      password.value = ''
+      login({ username: form.elements.username.value, password: form.elements.password.value })
     }
     catch(exception){
       invalidLogin()
@@ -19,20 +16,25 @@ const LoginForm = ({ login, invalidLogin }) => {
   }
 
   return (
-    <form id='login-form' onSubmit={ handleLogin }>
-      <div>
-        username
-        <input
-          id='username' { ...username }
+    <div>
+      <Form  id='login-form' onSubmit={ handleLogin }>
+        <Form.Group>
+          <Form.Label>username</Form.Label>
+          <Form.Control
+            type="text"
+            name="username"
           />
-      </div>
-      <div>
-        password
-        <input
-          id='password' { ...password }/>
-      </div>
-      <button id='submit-login' type='submit'>Log in</button>
-    </form>
+          <Form.Label>password</Form.Label>
+          <Form.Control
+            type="password"
+            name="password"
+          />
+          <Button variant="primary" type="submit">
+            login
+          </Button> 
+        </Form.Group>
+      </Form>
+    </div>
   )
 }
 export default LoginForm

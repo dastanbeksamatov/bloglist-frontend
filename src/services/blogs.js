@@ -6,20 +6,32 @@ let token = null
 const setToken = newToken => {
   token = `bearer ${newToken}`
 }
-
-console.log(token)
 const getAll = () => {
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
 }
 
 const add = async newBlog => {
-  console.log(token)
   const response = await axios.post(
     baseUrl,
     newBlog,
     { headers: { Authorization: token }
     })
+  return response.data
+}
+
+const addComment = async comment => {
+  const {id, ...rest} = comment
+  const response = await axios.post(
+    `${baseUrl}/${id}/comments`,
+    rest,
+    {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+  )
+  console.log(response.data)
   return response.data
 }
 
@@ -55,5 +67,6 @@ export default {
   add,
   setToken,
   remove,
-  update
+  update,
+  addComment
 }
