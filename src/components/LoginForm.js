@@ -1,20 +1,15 @@
 import React from 'react'
-import loginService from '../services/login'
 import { useField } from '../hooks'
 
 
-const LoginForm = ({ setUser, invalidLogin }) => {
+const LoginForm = ({ login, invalidLogin }) => {
   const username = useField('', '')
   const password = useField('password', '')
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({
-        username: username.value, password: password.value
-      })
-      window.localStorage.setItem('loggedInUser', JSON.stringify(user))
-      setUser(user)
+      login({ username: username.value, password: password.value })
       username.value = ''
       password.value = ''
     }
