@@ -33,7 +33,7 @@ const update = async newBlog => {
       }
     }
   )
-  return response.config.data
+  return response
 }
 
 const remove = async id => {

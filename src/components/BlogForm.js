@@ -1,23 +1,30 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useField } from '../hooks'
 
 const BlogForm = ({ addBlog, blogFormRef }) => {
-  // important: make testMode false before running
-  const [ newBlog, setNewBlog ] = useState( { title: '', author:'', url: '', likes:0 })
+
+  const title = useField('', '')
+  const author = useField('', '')
+  const url = useField('', '')
+  const likes = useField('number', 0)
+
+  const reset = () => {
+    title.value = ''
+    author.value = ''
+    url.value = ''
+    likes.value = 0
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault()
     blogFormRef.current.toggleVisibility()
-    await addBlog(newBlog)
-    setNewBlog({})
-  }
-  const handleBlogChange = (event) => {
-    event.preventDefault()
-    // gets every input by its name and updates newBlog state with every change
-    const target = event.target
-    const value = target.value
-    const name = target.name
-    setNewBlog({
-      ...newBlog, [name]: value
+    await addBlog({
+      title: title.value,
+      author: author.value,
+      url: url.value,
+      likes: likes.value
     })
+    reset()
   }
   return (
     <div>
@@ -25,41 +32,25 @@ const BlogForm = ({ addBlog, blogFormRef }) => {
         <div>
           title
           <input
-            id = 'title'
-            value = { newBlog.title || '' }
-            type='text'
-            name='title'
-            onChange={ handleBlogChange }>
+            id = 'title' name='title' {...title} >
           </input>
         </div>
         <div>
           author:
           <input
-            id = 'author'
-            value = { newBlog.author || '' }
-            type='text'
-            name='author'
-            onChange={ handleBlogChange }>
+            id = 'author' name='author' {...author} >
           </input>
         </div>
         <div>
           url
           <input
-            id = 'url'
-            value = { newBlog.url || '' }
-            type='text'
-            name='url'
-            onChange={ handleBlogChange }>
+            id = 'url' name='url' {...url} >
           </input>
         </div>
         <div>
           likes
           <input
-            id = 'likes'
-            value = { newBlog.likes || 0 }
-            type='number'
-            name='likes'
-            onChange={ handleBlogChange }>
+            id = 'likes' name='likes' {...likes}>
           </input>
           <br/>
           <button id='submit-blog' type='submit'>Add</button>

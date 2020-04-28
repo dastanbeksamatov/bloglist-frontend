@@ -1,32 +1,25 @@
-import React, { useState } from 'react'
+import React from 'react'
 import loginService from '../services/login'
-import propTypes from 'prop-types'
+import { useField } from '../hooks'
 
 
-const LoginForm = ({ setUser, setMessage }) => {
-  const [ username, setUsername ] = useState('')
-  const [ password, setPassword ] = useState('')
+const LoginForm = ({ setUser, invalidLogin }) => {
+  const username = useField('', '')
+  const password = useField('password', '')
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    console.log({ username, password })
     try {
       const user = await loginService.login({
-        username, password,
+        username: username.value, password: password.value
       })
       window.localStorage.setItem('loggedInUser', JSON.stringify(user))
       setUser(user)
-      setUsername('')
-      setPassword('')
+      username.value = ''
+      password.value = ''
     }
     catch(exception){
-      setMessage({
-        body: 'Wrong credentials',
-        type: false
-      })
-      setTimeout(() => {
-        setMessage({ body: '', type: true })
-      }, 500)
+      invalidLogin()
     }
   }
 
@@ -35,28 +28,16 @@ const LoginForm = ({ setUser, setMessage }) => {
       <div>
         username
         <input
-          id='username'
-          type='text'
-          value = { username }
-          name='username'
-          onChange={ ({ target }) => { setUsername(target.value) } } />
+          id='username' { ...username }
+          />
       </div>
       <div>
         password
         <input
-          id='password'
-          type='password'
-          value = { password }
-          name='password'
-          onChange={ ({ target }) => { setPassword(target.value) } } />
+          id='password' { ...password }/>
       </div>
       <button id='submit-login' type='submit'>Log in</button>
     </form>
   )
 }
 export default LoginForm
-
-LoginForm.propTypes = {
-  setMessage: propTypes.func.isRequired,
-  setUser: propTypes.func.isRequired
-}
